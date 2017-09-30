@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Bake With Kak Gun</string>
+
+    <string name="error_message_home">Sorry something went wrong :(</string>
+
+    <string name="intro_label_ingredients">Ingredients</string>
+    <string name="intro_label_steps">Steps</string>
+    <string name="intro_label_serving">Serving</string>
+
+    <string name="ingredients_label">INGREDIENTS</string>
+    <string name="steps_label">STEPS</string>
+
+    <string name="footer_label_prev">Previous</string>
+    <string name="footer_label_next">Next</string>
+</resources>
