@@ -2,12 +2,18 @@ package com.viv.gunchung.bakewithkakgun;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.viv.gunchung.bakewithkakgun.adapter.RecipeStepAdapter;
 import com.viv.gunchung.bakewithkakgun.models.Recipe;
+import com.viv.gunchung.bakewithkakgun.models.RecipeIngredient;
 import com.viv.gunchung.bakewithkakgun.models.RecipeStep;
 import com.viv.gunchung.bakewithkakgun.ui.RecipeIngredientsFragment;
 import com.viv.gunchung.bakewithkakgun.ui.RecipeIntroFragment;
@@ -66,6 +72,43 @@ public class RecipeActivity extends AppCompatActivity implements RecipeStepAdapt
                     .commit();
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipe, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClickedId = item.getItemId();
+        if (itemThatWasClickedId == R.id.action_favorite) {
+            Context context = RecipeActivity.this;
+            String textToShow = "Marked as Favorite Recipe";
+            Toast.makeText(context, textToShow, Toast.LENGTH_SHORT).show();
+
+            String preferenceName = BakingUtils.BAKING_PREFERENCE;
+            SharedPreferences sharedPref = getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
+
+            String ingredientList = "";
+            for(RecipeIngredient ingredient : mSelectedRecipe.getIngredients()) {
+                ingredientList = ingredientList +
+                        ingredient.getQuantity() + " " +
+                        BakingUtils.capitalize(ingredient.getMeasure()) + " " +
+                        BakingUtils.capitalize(ingredient.getIngredient()) + "\n";
+            }
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(BakingUtils.BAKING_PREFERENCE_RECIPE_NAME, mSelectedRecipe.getName());
+            editor.putString(BakingUtils.BAKING_PREFERENCE_RECIPE_ING, ingredientList);
+            editor.commit();
+
+            BakingWidgetService.startActionUpdateBakingWidgets(this);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

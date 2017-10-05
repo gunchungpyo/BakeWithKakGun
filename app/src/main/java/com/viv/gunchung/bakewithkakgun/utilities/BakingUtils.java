@@ -26,6 +26,11 @@ public final class BakingUtils {
     public static final String SELECTED_RECIPE_KEY = "selected_recipe";
     public static final String SELECTED_STEP_IDX = "selected_step_index";
 
+    public static final String BAKING_PREFERENCE = "my_baking_preference";
+    public static final String BAKING_PREFERENCE_RECIPE_NAME = "my_baking_preference_recipe_name";
+    public static final String BAKING_PREFERENCE_RECIPE_ING = "my_baking_preference_recipe_ing";
+
+
     public static Response getResponseFromServer() throws IOException {
         String url = API_URL;
         OkHttpClient client = new OkHttpClient();
@@ -46,7 +51,8 @@ public final class BakingUtils {
 
         try {
             String body = response.body().string();
-            parsedRecipeData = JSON.parseObject(body, new TypeReference<List<Recipe>>() {});
+            parsedRecipeData = JSON.parseObject(body, new TypeReference<List<Recipe>>() {
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,4 +65,10 @@ public final class BakingUtils {
     public static boolean isValidUrl(String url) {
         return (!TextUtils.isEmpty(url) && URLUtil.isValidUrl(url));
     }
+
+    public static String capitalize(String input) {
+        String output = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        return output;
+    }
+
 }

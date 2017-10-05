@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLayoutBg"
+    android:orientation="vertical">
+
+
+
+    <TextView
+        android:id="@+id/widget_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        tools:text="Cheese Cake" />
+
+    <TextView
+        android:id="@+id/widget_recipe_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp"
+        android:textSize="14sp"
+        android:textColor="@color/colorTextPrimary"
+        tools:text="1 Tblsp Mascapone Cheese (Room temperature)\n1 Tblsp Mascapone Cheese (Room temperature)" />
+
+    <TextView
+        android:id="@+id/widget_select_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Please select your recipe first"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary" />
+
+</LinearLayout>
