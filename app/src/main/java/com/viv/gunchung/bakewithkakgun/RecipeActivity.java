@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +17,7 @@ import com.viv.gunchung.bakewithkakgun.models.RecipeStep;
 import com.viv.gunchung.bakewithkakgun.ui.RecipeIngredientsFragment;
 import com.viv.gunchung.bakewithkakgun.ui.RecipeIntroFragment;
 import com.viv.gunchung.bakewithkakgun.ui.RecipeStepsFragment;
+import com.viv.gunchung.bakewithkakgun.ui.StepDetailFragment;
 import com.viv.gunchung.bakewithkakgun.utilities.BakingUtils;
 
 import org.parceler.Parcels;
@@ -28,10 +28,16 @@ public class RecipeActivity extends AppCompatActivity implements RecipeStepAdapt
 
     private Recipe mSelectedRecipe;
 
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        if (findViewById(R.id.second_pane_layout) != null) {
+            mTwoPane = true;
+        }
 
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
@@ -71,6 +77,15 @@ public class RecipeActivity extends AppCompatActivity implements RecipeStepAdapt
                     .add(R.id.step_container, stepsFragment)
                     .commit();
 
+            // video
+            if (mTwoPane) {
+                StepDetailFragment stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setSelectedStep(mSelectedRecipe.getSteps().get(0));
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.second_pane_layout, stepDetailFragment)
+                        .commit();
+            }
         }
     }
 
@@ -92,7 +107,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeStepAdapt
             SharedPreferences sharedPref = getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
 
             String ingredientList = "";
-            for(RecipeIngredient ingredient : mSelectedRecipe.getIngredients()) {
+            for (RecipeIngredient ingredient : mSelectedRecipe.getIngredients()) {
                 ingredientList = ingredientList +
                         ingredient.getQuantity() + " " +
                         BakingUtils.capitalize(ingredient.getMeasure()) + " " +
@@ -116,16 +131,28 @@ public class RecipeActivity extends AppCompatActivity implements RecipeStepAdapt
         Timber.d("onClick: " + index);
         Timber.d("onClick: " + selectedStep.getShortDescription());
 
-        Context context = this;
-        Class destinationClass = StepActivity.class;
-        Intent intentToStartRecipeActivity = new Intent(context, destinationClass);
+        if (mTwoPane) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        String parcelRecipeKey = BakingUtils.SELECTED_RECIPE_KEY;
-        intentToStartRecipeActivity.putExtra(parcelRecipeKey, Parcels.wrap(mSelectedRecipe));
+            // detail step
+            StepDetailFragment nextDetailFragment = new StepDetailFragment();
+            nextDetailFragment.setSelectedStep(mSelectedRecipe.getSteps().get(index));
 
-        String stepIdxKey = BakingUtils.SELECTED_STEP_IDX;
-        intentToStartRecipeActivity.putExtra(stepIdxKey, index);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.second_pane_layout, nextDetailFragment)
+                    .commit();
+        } else {
+            Context context = this;
+            Class destinationClass = StepActivity.class;
+            Intent intentToStartRecipeActivity = new Intent(context, destinationClass);
 
-        startActivity(intentToStartRecipeActivity);
+            String parcelRecipeKey = BakingUtils.SELECTED_RECIPE_KEY;
+            intentToStartRecipeActivity.putExtra(parcelRecipeKey, Parcels.wrap(mSelectedRecipe));
+
+            String stepIdxKey = BakingUtils.SELECTED_STEP_IDX;
+            intentToStartRecipeActivity.putExtra(stepIdxKey, index);
+
+            startActivity(intentToStartRecipeActivity);
+        }
     }
 }
