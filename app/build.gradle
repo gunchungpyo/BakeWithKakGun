@@ -46,7 +46,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.alibaba:fastjson:1.1.63.android'
     compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'org.parceler:parceler:1.1.9'
