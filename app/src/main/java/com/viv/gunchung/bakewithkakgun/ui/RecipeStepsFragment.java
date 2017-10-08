@@ -54,6 +54,7 @@ public class RecipeStepsFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_recipe_step);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new RecipeStepAdapter(callback, mSelected.getSteps());

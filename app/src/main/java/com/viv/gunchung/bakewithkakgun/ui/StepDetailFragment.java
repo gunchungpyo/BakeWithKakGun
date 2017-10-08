@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -21,6 +22,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import com.viv.gunchung.bakewithkakgun.R;
 import com.viv.gunchung.bakewithkakgun.models.RecipeStep;
 import com.viv.gunchung.bakewithkakgun.utilities.BakingUtils;
@@ -56,6 +58,8 @@ public class StepDetailFragment extends Fragment {
     SimpleExoPlayerView mPlayerView;
     @BindView(R.id.tv_step_detail_desc)
     TextView stepTextView;
+    @BindView(R.id.exo_thumbnail)
+    ImageView mVideoThumb;
 
     public StepDetailFragment() {
     }
@@ -72,19 +76,29 @@ public class StepDetailFragment extends Fragment {
 
         stepTextView.setText(mSelected.getDescription());
 
-        if (BakingUtils.isValidUrl(mSelected.getVideoURL())) {
+        if (BakingUtils.isValidUrl(mSelected.getVideoURL()) && BakingUtils.isVideoUrl(mSelected.getVideoURL())) {
             Timber.d("getVideoURL " + mSelected.getVideoURL());
             mPlayerView.setVisibility(View.VISIBLE);
+            mVideoThumb.setVisibility(View.GONE);
             validVideoUrl = mSelected.getVideoURL();
             initializePlayer();
-        } else if (BakingUtils.isValidUrl(mSelected.getThumbnailURL())) {
+
+        } else if (BakingUtils.isValidUrl(mSelected.getThumbnailURL()) && BakingUtils.isVideoUrl(mSelected.getThumbnailURL())) {
             Timber.d("getThumbnailURL " + mSelected.getThumbnailURL());
             mPlayerView.setVisibility(View.VISIBLE);
+            mVideoThumb.setVisibility(View.GONE);
             validVideoUrl = mSelected.getThumbnailURL();
             initializePlayer();
+
+        } else if (BakingUtils.isValidUrl(mSelected.getThumbnailURL())) {
+            mPlayerView.setVisibility(View.GONE);
+            Picasso.with(getContext()).load(mSelected.getThumbnailURL()).into(mVideoThumb);
+            mVideoThumb.setVisibility(View.VISIBLE);
+
         } else {
             Timber.d("NO VIDEOOOOOO");
             mPlayerView.setVisibility(View.GONE);
+            mVideoThumb.setVisibility(View.GONE);
         }
 
     }
@@ -117,15 +131,15 @@ public class StepDetailFragment extends Fragment {
                     new DefaultDataSourceFactory(getActivity(), userAgent),
                     new DefaultExtractorsFactory(), null, null);
 
-            mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(playWhenReady);
             mExoPlayer.seekTo(currentWindow, playbackPosition);
+            mExoPlayer.prepare(mediaSource);
         }
     }
 
     private void releasePlayer() {
         if (mExoPlayer != null) {
-            playbackPosition = mExoPlayer.getCurrentPosition();
+            playbackPosition = Math.max(0, mExoPlayer.getCurrentPosition());
             currentWindow = mExoPlayer.getCurrentWindowIndex();
             playWhenReady = mExoPlayer.getPlayWhenReady();
             mExoPlayer.release();

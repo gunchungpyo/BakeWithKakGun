@@ -41,6 +41,7 @@ public class RecipeIngredientsFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_recipe_ingredient);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new RecipeIngredientAdapter(mSelected.getIngredients());

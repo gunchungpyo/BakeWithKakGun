@@ -8,6 +8,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.viv.gunchung.bakewithkakgun.models.Recipe;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -69,6 +70,17 @@ public final class BakingUtils {
     public static String capitalize(String input) {
         String output = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
         return output;
+    }
+
+    public static boolean isVideoUrl(String url) {
+        List<String> extVideoList = Arrays.asList("mp4", "mpeg", "mp3");
+        if (url.contains(".")) {
+            String extension = url.substring(url.lastIndexOf(".") + 1);
+            if (extVideoList.contains(extension)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
