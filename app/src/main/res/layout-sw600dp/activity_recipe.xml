@@ -3,17 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorLayoutBg"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:background="@color/colorLayoutBg"
     tools:context="com.viv.gunchung.bakewithkakgun.RecipeActivity">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv_recipe"
         android:layout_width="350dp"
         android:layout_height="match_parent"
         android:background="@color/colorLayoutBg">
 
         <LinearLayout
+            android:id="@+id/ll_recipe_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"

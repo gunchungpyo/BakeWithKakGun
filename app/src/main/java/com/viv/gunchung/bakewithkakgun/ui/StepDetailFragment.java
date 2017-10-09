@@ -169,6 +169,10 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (mExoPlayer != null) {
+            playbackPosition = Math.max(0, mExoPlayer.getCurrentPosition());
+            currentWindow = mExoPlayer.getCurrentWindowIndex();
+        }
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
